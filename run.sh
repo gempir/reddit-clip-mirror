@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p "/tmp"
-PIDFILE="/tmp/***REMOVED***.pid"
+PIDFILE="/tmp/nnysbot.pid"
 
 if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
                            grep -P "^\s*$(cat ${PIDFILE})$" &> /dev/null); then
@@ -9,7 +9,7 @@ if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
   exit 99
 fi
 
-cd /root/***REMOVED*** && /usr/bin/python3 main.py >> /root/cron.log &
+cd /root/nnysbot && /usr/bin/python3 main.py >> /root/cron.log &
 
 echo $! > "${PIDFILE}"
 chmod 644 "${PIDFILE}"

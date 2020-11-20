@@ -16,7 +16,7 @@ import praw
 import requests
 
 logging.basicConfig(
-    filename='/root/***REMOVED***/process.log',
+    filename='/root/nnysbot/process.log',
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
@@ -62,6 +62,7 @@ def main():
 
     for post in postsid:
         submission = reddit.submission(id=post)
+        logging.info("Processing {} comments".format(len(submission.comments)))
         for c in submission.comments:
             if c.id in cache:
                 break
