@@ -60,10 +60,8 @@ def main():
 
     for post in postsid:
         submission = reddit.submission(id=post)
-
-        comments = submission.comments.replace_more(limit=0)
-        logging.info("Processing {} comments".format(len(comments)))
-        for c in comments:
+        logging.info("Processing {} comments".format(len(submission.comments)))
+        for c in submission.comments:
             if c.id in cache:
                 break
             else:
