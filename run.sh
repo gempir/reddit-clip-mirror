@@ -9,7 +9,7 @@ if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
   exit 99
 fi
 
-/root/***REMOVED***/run.sh >> /root/cron.log &
+/usr/bin/python3 /root/***REMOVED***/main.py >> /root/cron.log &
 
 echo $! > "${PIDFILE}"
 chmod 644 "${PIDFILE}"
