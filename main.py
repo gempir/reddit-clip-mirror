@@ -46,7 +46,7 @@ def load_json():
 
 def main():
     if path.exists("comments.json"):
-        cache = {} # load_json()
+        cache =  load_json()
     else:
         cache = {}
 
