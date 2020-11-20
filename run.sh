@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p "/tmp"
-PIDFILE="/tmp/nnysbot.pid"
+PIDFILE="/tmp/redditclipmirror.pid"
 
 if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
                            grep -P "^\s*$(cat ${PIDFILE})$" &> /dev/null); then
@@ -9,7 +9,7 @@ if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
   exit 99
 fi
 
-cd /root/nnysbot && /usr/bin/python3 main.py >> /root/cron.log &
+cd /root/reddt-clip-mirror && /usr/bin/python3 main.py >> /root/reddt-clip-mirror/cron.log &
 
 echo $! > "${PIDFILE}"
 chmod 644 "${PIDFILE}"
