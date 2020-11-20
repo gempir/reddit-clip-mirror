@@ -9,7 +9,7 @@ if [ -e "${PIDFILE}" ] && (ps -u $(whoami) -opid= |
   exit 99
 fi
 
-cd /root/reddt-clip-mirror && /usr/bin/python3 main.py >> /root/reddt-clip-mirror/cron.log &
+cd /root/reddit-clip-mirror && /usr/bin/python3 main.py >> /root/reddit-clip-mirror/cron.log &
 
 echo $! > "${PIDFILE}"
 chmod 644 "${PIDFILE}"
