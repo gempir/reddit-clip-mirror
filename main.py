@@ -39,10 +39,10 @@ def check_condition(c):
         return False
 
 def main():
-    if path.exists("cache.csv"):
+    if path.exists("cache.csv"): #cache saving not working
        cache = loadtxt('cache.csv', delimiter=',')
     else:
-        cache = asarray([])
+        cache = asarray([]) #
     while True:
         for c in reddit.subreddit("nnystest").comments():
             if c.id in cache:
