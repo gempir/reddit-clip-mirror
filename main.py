@@ -5,7 +5,6 @@ Twitch clips to streamable
 @author: king344
 """
 
-"""IMPORTS and Initializations"""
 from urlextract import URLExtract
 
 import os.path
