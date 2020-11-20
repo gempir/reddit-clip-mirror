@@ -4,17 +4,11 @@ Twitch clips to streamable
 
 @author: king344
 """
-
-from urlextract import URLExtract
-
 import os.path
 from os import path
+import re
  
-import numpy as np
-from numpy import asarray
-from numpy import savetxt
-from numpy import loadtxt
-
+import json
 import praw
 
 reddit = praw.Reddit(
@@ -31,35 +25,44 @@ SPAW = spaw.SPAW()
 
 SPAW.auth('***REMOVED***', '***REMOVED***')
 
+regex = r"https:\/\/(www|clips)\.twitch\.tv\/(\w*\/)?(clip\/)?\w*"
+
 def check_condition(c):
     text = c.body
-    if "https://clips.twitch.tv/" in text:
-        return True
+
+    match = re.search(r"https:\/\/(www|clips)\.twitch\.tv\/(\w*\/)?(clip\/)?\w*", text)
+    if match and match.group():
+        return match.group()
     else:
         return False
 
+def save_json(data):
+    with open('comments.json', 'w') as outfile:
+        json.dump(data, outfile)
+
+def load_json():
+    with open('comments.json') as json_file:
+        return json.load(json_file)
+
 def main():
-    if path.exists("cache.csv"):
-       cache = loadtxt('cache.csv', delimiter=',')
+    if path.exists("comments.json"):
+        cache = {} # load_json()
     else:
-        cache = asarray([])
-    while True:
-        for c in reddit.subreddit("nnystest").comments():
-            if c.id in cache:
-                break
-            else:
-                cache = np.append(cache, c.id)
-                savetxt('data.csv', cache, delimiter=',')
-                condition = check_condition(c)
-                if condition:
-                    extractor = URLExtract()
-                    urls = extractor.find_urls(c.body)
-                    twitchlink = urls[0]
-                    stlink = SPAW.videoImport(twitchlink)          
-                    newlink = 'https://streamable.com/'           
-                    newlink += stlink['shortcode']
-                    newlink += " I'm a bot bipp bopp!"
-                    c.reply(newlink)
+        cache = {}
+
+    for c in reddit.subreddit("nnystest").comments():
+        if c.id in cache:
+            break
+        else:
+            url = check_condition(c)
+            cache[c.id] = url
+            save_json(cache)
+            if url:
+                stlink = SPAW.videoImport(url)
+                newlink = 'https://streamable.com/'           
+                newlink += stlink['shortcode']
+                newlink += " I'm a bot bipp bopp!"
+                c.reply(newlink)
 
 if __name__ == "__main__":
     main()
