@@ -8,6 +8,7 @@ Twitch clips to streamable
 import os.path
 from os import path
 import re
+import logging
  
 import json
 import praw
@@ -73,10 +74,10 @@ def uploadToStreamable(url):
         response = requests.get('https://api.streamable.com/import?url='+url, auth=(cfg['streamableEmail'], cfg['streamablePassword']))
         if response.status_code == 200:
             data = response.json()
-            print("Success uploading: " + url + " id: " + data['shortcode'])
+            logging.info("Success uploading: " + url + " id: " + data['shortcode'])
             return "http://streamable.com/" + data['shortcode']
         else: 
-            print(response.text)
+            logging.error(response.text)
             return False
     except requests.exceptions.RequestException as e:
         return str(e)
