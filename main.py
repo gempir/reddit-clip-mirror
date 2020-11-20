@@ -1,15 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Twitch clips to streamable
-
-@author: king344
-@author: gempir
-"""
 import os.path
 from os import path
 import re
 import logging
- 
+
 import json
 import praw
 
@@ -26,9 +19,11 @@ def save_json(data):
     with open('comments.json', 'w') as outfile:
         json.dump(data, outfile)
 
+
 def load_json(file):
     with open(file) as json_file:
         return json.load(json_file)
+
 
 cfg = load_json("config.json")
 
@@ -42,10 +37,12 @@ reddit = praw.Reddit(
 
 regex = r"https:\/\/(www|clips)\.twitch\.tv\/(\w*\/)?(clip\/)?\w*"
 
+
 def check_condition(c):
     text = c.body
 
-    match = re.search(r"https:\/\/(www|clips)\.twitch\.tv\/(\w*\/)?(clip\/)?\w*", text)
+    match = re.search(
+        r"https:\/\/(www|clips)\.twitch\.tv\/(\w*\/)?(clip\/)?\w*", text)
     if match and match.group():
         return match.group()
     else:
@@ -54,11 +51,12 @@ def check_condition(c):
 
 def main():
     if path.exists("comments.json"):
-        cache =  load_json("comments.json")
+        cache = load_json("comments.json")
     else:
         cache = {}
 
-    postsid = ['jxr1p8','jxqvez','jxrmcl','jxrn3p','jxr0sb','jxqoip','jxraoe','jxqnwf','jxqgr8','jxqkpt','jxqjhh','jxqgj4','jxqers']
+    postsid = ['jxr1p8', 'jxqvez', 'jxrmcl', 'jxrn3p', 'jxr0sb', 'jxqoip',
+               'jxraoe', 'jxqnwf', 'jxqgr8', 'jxqkpt', 'jxqjhh', 'jxqgj4', 'jxqers']
 
     for post in postsid:
         submission = reddit.submission(id=post)
@@ -78,16 +76,19 @@ def main():
 
 def uploadToStreamable(url):
     try:
-        response = requests.get('https://api.streamable.com/import?url='+url, auth=(cfg['streamableEmail'], cfg['streamablePassword']))
+        response = requests.get('https://api.streamable.com/import?url=' +
+                                url, auth=(cfg['streamableEmail'], cfg['streamablePassword']))
         if response.status_code == 200:
             data = response.json()
-            logging.info("Success uploading: " + url + " id: " + data['shortcode'])
+            logging.info("Success uploading: " + url +
+                         " id: " + data['shortcode'])
             return "http://streamable.com/" + data['shortcode']
-        else: 
+        else:
             logging.error(response.text)
             return False
     except requests.exceptions.RequestException as e:
         return str(e)
+
 
 if __name__ == "__main__":
     main()
