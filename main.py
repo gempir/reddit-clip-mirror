@@ -51,18 +51,21 @@ def main():
     else:
         cache = {}
 
-    for c in reddit.subreddit("nnys").comments():
-        if c.id in cache:
-            # c.reply("Mirror: " + cache[c.id]) reply here if we didn't already reply
-            break
-        else:
-            url = check_condition(c)
-            if url:
-                link = uploadToStreamable(url)
-                if link:
-                    c.reply("Mirror: " + link)
-                    cache[c.id] = link
-                    save_json(cache)
+    postsid = ['jxr1p8','jxqvez','jxrmcl','jxrn3p','jxr0sb','jxqoip','jxraoe','jxqnwf','jxqgr8','jxqkpt','jxqjhh','jxqgj4','jxqers']
+
+    for post in postsid:
+        submission = reddit.submission(id=post)
+        for c in submission.comments:
+            if c.id in cache:
+                break
+            else:
+                url = check_condition(c)
+                if url:
+                    link = uploadToStreamable(url)
+                    if link:
+                        c.reply("Mirror: " + link)
+                        cache[c.id] = link
+                        save_json(cache)
 
 
 def uploadToStreamable(url):
