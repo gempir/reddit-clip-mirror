@@ -68,7 +68,16 @@ def main():
                 break
             else:
                 url = check_condition(c)
-                if url:
+                already_replied = False
+
+                if len(c.replies) > 0:
+                    for reply in c.replies:
+                        if reply.author.name == cfg['username']:
+                            logging.info("Already replied to " + c.id)
+                            already_replied = True
+                            break
+
+                if url and not already_replied:
                     link = uploadToStreamable(url)
                     if link:
                         c.reply("Mirror: " + link)
