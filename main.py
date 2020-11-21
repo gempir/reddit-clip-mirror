@@ -89,7 +89,8 @@ def uploadToStreamable(url):
             logging.error(response.text)
             return False
     except requests.exceptions.RequestException as e:
-        return str(e)
+        logging.error(e)
+        return False
 
 
 if __name__ == "__main__":
