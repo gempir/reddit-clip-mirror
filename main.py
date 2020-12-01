@@ -14,12 +14,6 @@ logging.basicConfig(
     level=logging.INFO,
     datefmt='%Y-%m-%d %H:%M:%S')
 
-
-def save_json(data):
-    with open('comments.json', 'w') as outfile:
-        json.dump(data, outfile)
-
-
 def load_json(file):
     with open(file) as json_file:
         return json.load(json_file)
@@ -50,11 +44,6 @@ def check_condition(c):
 
 
 def main():
-    if path.exists("comments.json"):
-        cache = load_json("comments.json")
-    else:
-        cache = {}
-
     postsid = ['jxr1p8', 'jxqvez', 'jxrmcl', 'jxrn3p', 'jxr0sb', 'jxqoip',
                'jxraoe', 'jxqnwf', 'jxqgr8', 'jxqkpt', 'jxqjhh', 'jxqgj4', 'jxqers']
 
@@ -64,25 +53,20 @@ def main():
 
         logging.info("Processing {} comments".format(len(submission.comments)))
         for c in submission.comments:
-            if c.id in cache:
-                break
-            else:
-                url = check_condition(c)
-                already_replied = False
+            url = check_condition(c)
+            already_replied = False
 
-                if len(c.replies) > 0:
-                    for reply in c.replies:
-                        if reply.author.name == cfg['username']:
-                            logging.info("Already replied to " + c.id)
-                            already_replied = True
-                            break
+            if len(c.replies) > 0:
+                for reply in c.replies:
+                    if reply.author.name == cfg['username']:
+                        logging.info("Already replied to " + c.id)
+                        already_replied = True
+                        break
 
-                if url and not already_replied:
-                    link = uploadToStreamable(url)
-                    if link:
-                        c.reply("Mirror: " + link)
-                        cache[c.id] = link
-                        save_json(cache)
+            if url and not already_replied:
+                link = uploadToStreamable(url)
+                if link:
+                    c.reply("Mirror: " + link)
 
 
 def uploadToStreamable(url):
