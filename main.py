@@ -59,14 +59,14 @@ def main():
             if len(c.replies) > 0:
                 for reply in c.replies:
                     if reply.author.name == cfg['username']:
-                        logging.info("Already replied to " + c.id)
                         already_replied = True
                         break
 
             if url and not already_replied:
                 link = uploadToStreamable(url)
                 if link:
-                    c.reply("Mirror: " + link)
+                    logging.info("Replying {}: Mirror: {}".format(c.id, link))
+                    c.reply("Mirror: {}".format(link))
 
 
 def uploadToStreamable(url):
@@ -79,7 +79,7 @@ def uploadToStreamable(url):
                          " id: " + data['shortcode'])
             return "http://streamable.com/" + data['shortcode']
         else:
-            logging.error(response.text)
+            logging.error("{} {}".format(response.status_code, response.text))
             return False
     except requests.exceptions.RequestException as e:
         logging.error(e)
