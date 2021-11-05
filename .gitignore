@@ -2,3 +2,4 @@ config.json
 comments.json
 process.log
 passwords.txt
+.env

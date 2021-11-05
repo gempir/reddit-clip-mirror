@@ -1,31 +1,24 @@
-name: deploy
+name: Mirror
 
 on:
-  push:
-    branches:
-      - "master"
+  schedule:
+  - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   Deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
 
-      - name: Setup SSH
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-          SSH_KEY: ${{ secrets.KEY }}
-        run: |
-          mkdir ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_rsa
-          touch ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/id_rsa
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add ~/.ssh/id_rsa
-          ssh-keyscan ${{ secrets.HOST }} >> ~/.ssh/known_hosts
-
-      - name: Deploy
-        run: |
-          scp main.py root@${{ secrets.HOST }}:/root/reddit-clip-mirror
-          scp run.sh root@${{ secrets.HOST }}:/root/reddit-clip-mirror
+      - name: Run
+        run: python main.py
+        env: 
+          STREAMABLE_EMAIL: ${{ secrets.STREAMABLE_USERNAME }}
+          STREAMABLE_PASSWORD: ${{ secrets.STREAMABLE_PASSWORD }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
