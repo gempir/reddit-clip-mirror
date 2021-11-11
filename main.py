@@ -31,7 +31,6 @@ def check_condition(c):
 
 def main():
     postsid = [
-        'qmm84u',
         'qrpz57',
         'qrpyps',
         'qrpxih',
