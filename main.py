@@ -59,7 +59,7 @@ def main():
         submission = reddit.submission(id=post)
         submission.comments.replace_more(limit=None)
 
-        logging.info(f"Processing {len(submission.comments)} comments on post {submission.name}")
+        logging.info(f"Processing {len(submission.comments)} comments on post {submission.id}: {submission.title}")
         for c in submission.comments:
             url = check_condition(c)
             already_replied = False
