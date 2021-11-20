@@ -31,26 +31,26 @@ def check_condition(c):
 
 def main():
     postsid = [
+        'qy8dws',
+        'qy8cyi',
+        'qy8can',
+        'qy8bgn',
+        'qy8aty',
+        'qv8fkg',
+        'qv8djx',
         'qrpz57',
         'qrpyps',
         'qrpxih',
-        'qrpx8l',
         'qrpwuf',
         'qrpvx8',
-        'qrpvru',
-        'qrpvml',
-        'qrpvfd',
         'qrpv97',
         'qrpv46',
-        'qrptgg',
-        'qrpt6t',
-        'qrpsz3',
         'qrpstz',
         'qrpshr',
         'qrpsa6',
         'qrps1e',
         'qrprhr',
-        'qrpq2w',
+        'qrpq2w'
     ]
 
     logging.info(f"Scanning {len(postsid)} posts")
