@@ -66,7 +66,7 @@ def main():
 
             if len(c.replies) > 0:
                 for reply in c.replies:
-                    if reply.author.name == os.getenv('REDDIT_USERNAME'):
+                    if reply and reply.author and reply.author.name == os.getenv('REDDIT_USERNAME'):
                         already_replied = True
                         break
 
