@@ -1,9 +1,11 @@
+from __future__ import unicode_literals
 import logging
 import os
 import re
 
 import praw
-import requests
+import youtube_dl
+from mega import Mega
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -17,6 +19,11 @@ reddit = praw.Reddit(
     username=os.getenv('REDDIT_USERNAME'),
     password=os.getenv('REDDIT_PASSWORD')
 )
+
+mega = Mega()
+m = mega.login(os.getenv('MEGA_USERNAME'), os.getenv('MEGA_PASSWORD'))
+# m.create_folder('nnys2021clips')
+clipFolder = m.find('nnys2021clips')
 
 def check_condition(c):
     text = c.body
@@ -72,27 +79,35 @@ def main():
 
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
-                link = uploadToStreamable(url)
+                link = uploadClip(url)
                 if link:
                     logging.info("Replying {}: Mirror: {}".format(c.id, link))
                     c.reply("Mirror: {}".format(link))
 
 
-def uploadToStreamable(url):
+
+def uploadClip(url):
     try:
-        response = requests.get('https://api.streamable.com/import?url=' +
-                                url, auth=(os.getenv('STREAMABLE_EMAIL'), os.getenv('STREAMABLE_PASSWORD')))
-        if response.status_code == 200:
-            data = response.json()
-            logging.info("Success uploading: " + url +
-                         " id: " + data['shortcode'])
-            return "http://streamable.com/" + data['shortcode']
-        else:
-            logging.error("Streamable error {} {}".format(response.status_code, response.text))
-            return False
-    except requests.exceptions.RequestException as e:
+        ydl_opts = {
+            'progress_hooks': [my_hook],
+            'outtmpl': './clips/%(title)s-%(id)s.%(ext)s',
+        }
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+       
+    except Exception as e:
         logging.error(e)
+        os._exit(0)
         return False
+
+def my_hook(d):
+    if d['status'] == 'finished':
+        print(d['filename'] + ' Done downloading, now uploading to mega')
+        file = m.upload(d['filename'], clipFolder)
+        print(file.name + " uploaded " + file.link)
+        public_link = m.get_upload_link(file)
+        print(public_link + " new mega link")
+        os._exit(0)
 
 
 if __name__ == "__main__":

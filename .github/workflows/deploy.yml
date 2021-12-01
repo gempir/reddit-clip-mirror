@@ -7,6 +7,7 @@ on:
 
 jobs:
   Deploy:
+    timeout-minutes: 25
     runs-on: ubuntu-latest
 
     steps:
@@ -25,3 +26,5 @@ jobs:
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          MEGA_USERNAME: ${{ secrets.REDDIT_PASSWORD }}
+          MEGA_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}

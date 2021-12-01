@@ -3,3 +3,5 @@ comments.json
 process.log
 passwords.txt
 .env
+clips/*
+!clips/.gitkeep
