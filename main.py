@@ -5,7 +5,7 @@ import re
 
 import praw
 import youtube_dl
-from mega import Mega
+import json
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -20,11 +20,6 @@ reddit = praw.Reddit(
     password=os.getenv('REDDIT_PASSWORD')
 )
 
-mega = Mega()
-m = mega.login(os.getenv('MEGA_USERNAME'), os.getenv('MEGA_PASSWORD'))
-# m.create_folder('nnys2021clips')
-clipFolder = m.find('nnys2021clips')
-
 def check_condition(c):
     text = c.body
 
@@ -35,6 +30,8 @@ def check_condition(c):
     else:
         return False
 
+
+replies = []
 
 def main():
     postsid = [
@@ -79,17 +76,20 @@ def main():
 
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
-                link = uploadClip(url)
-                if link:
-                    logging.info("Replying {}: Mirror: {}".format(c.id, link))
-                    c.reply("Mirror: {}".format(link))
+                saveClip(url, c)
+                if len(replies) == 1:
+                    json.dump(replies, open('replies.json', 'w'))
 
 
-
-def uploadClip(url):
+def saveClip(url, c):
     try:
+        def finished_upload(d):
+            if d['status'] == 'finished':
+                print(d['filename'] + ' Done downloading')
+                replies.append({"file": d['filename'], "comment": c.id})
+
         ydl_opts = {
-            'progress_hooks': [my_hook],
+            'progress_hooks': [finished_upload],
             'outtmpl': './clips/%(title)s-%(id)s.%(ext)s',
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
@@ -97,17 +97,6 @@ def uploadClip(url):
        
     except Exception as e:
         logging.error(e)
-        os._exit(0)
-        return False
-
-def my_hook(d):
-    if d['status'] == 'finished':
-        print(d['filename'] + ' Done downloading, now uploading to mega')
-        os._exit(0)
-        file = m.upload(d['filename'], clipFolder)
-        print(file.name + " uploaded " + file.link)
-        public_link = m.get_upload_link(file)
-        print(public_link + " new mega link")
         os._exit(0)
 
 

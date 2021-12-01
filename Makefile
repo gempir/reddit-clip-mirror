@@ -13,5 +13,8 @@ export MEGA_PASSWORD
 run:
 	python3 main.py
 
+reply:
+	python3 reply.py
+
 setup:
 	pip3 install -r requirements.txt

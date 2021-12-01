@@ -1,8 +1,8 @@
 name: Mirror
 
 on:
-  schedule:
-  - cron: "*/30 * * * *"
+  # schedule:
+  # - cron: "*/30 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -38,3 +38,15 @@ jobs:
         env:
           USERNAME: ${{ secrets.MEGA_USERNAME }}
           PASSWORD: ${{ secrets.MEGA_PASSWORD }}
+
+      - name: Reply
+        run: python reply.py
+        env: 
+          STREAMABLE_EMAIL: ${{ secrets.STREAMABLE_USERNAME }}
+          STREAMABLE_PASSWORD: ${{ secrets.STREAMABLE_PASSWORD }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          MEGA_USERNAME: ${{ secrets.MEGA_USERNAME }}
+          MEGA_PASSWORD: ${{ secrets.MEGA_PASSWORD }}

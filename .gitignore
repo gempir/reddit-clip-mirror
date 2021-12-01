@@ -5,3 +5,4 @@ passwords.txt
 .env
 clips/*
 !clips/.gitkeep
+replies.json
