@@ -103,6 +103,7 @@ def uploadClip(url):
 def my_hook(d):
     if d['status'] == 'finished':
         print(d['filename'] + ' Done downloading, now uploading to mega')
+        os._exit(0)
         file = m.upload(d['filename'], clipFolder)
         print(file.name + " uploaded " + file.link)
         public_link = m.get_upload_link(file)
