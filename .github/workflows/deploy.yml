@@ -28,5 +28,5 @@ jobs:
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
-          MEGA_USERNAME: ${{ secrets.REDDIT_PASSWORD }}
-          MEGA_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          MEGA_USERNAME: ${{ secrets.MEGA_USERNAME }}
+          MEGA_PASSWORD: ${{ secrets.MEGA_PASSWORD }}
