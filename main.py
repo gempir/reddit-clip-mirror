@@ -74,7 +74,7 @@ def main():
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
                 saveClip(url, c)
-                if len(replies) >= 5:
+                if len(replies) >= 1:
                     logging.info("5 clips downloaded, exiting")
                     with open('replies.txt', "w") as f:
                         for line in replies:
