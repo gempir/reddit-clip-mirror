@@ -12,41 +12,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Make envfile  
+        uses: SpicyPizza/create-envfile@v1
         with:
-          python-version: '3.9.9'
-
-      - name: Requirements
-        run: pip install -r requirements.txt
-
-      - name: Run
-        run: python main.py
-        env: 
-          STREAMABLE_EMAIL: ${{ secrets.STREAMABLE_USERNAME }}
-          STREAMABLE_PASSWORD: ${{ secrets.STREAMABLE_PASSWORD }}
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
-          MEGA_USERNAME: ${{ secrets.MEGA_USERNAME }}
-          MEGA_PASSWORD: ${{ secrets.MEGA_PASSWORD }}
-
-      - name: Upload 
-        uses: Difegue/action-megacmd@master
-        with:
-          args: put ./clips nnys2021clips
-        env:
-          USERNAME: ${{ secrets.MEGA_USERNAME }}
-          PASSWORD: ${{ secrets.MEGA_PASSWORD }}
-
-      - name: Reply
-        run: python reply.py
-        env: 
-          STREAMABLE_EMAIL: ${{ secrets.STREAMABLE_USERNAME }}
-          STREAMABLE_PASSWORD: ${{ secrets.STREAMABLE_PASSWORD }}
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
-          REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
-          MEGA_USERNAME: ${{ secrets.MEGA_USERNAME }}
-          MEGA_PASSWORD: ${{ secrets.MEGA_PASSWORD }}
+          envkey_STREAMABLE_EMAIL: ${{ secrets.STREAMABLE_USERNAME }}
+          envkey_STREAMABLE_PASSWORD: ${{ secrets.STREAMABLE_PASSWORD }}
+          envkey_REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          envkey_REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          envkey_REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+          envkey_REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          envkey_MEGA_USERNAME: ${{ secrets.MEGA_USERNAME }}
+          envkey_MEGA_PASSWORD: ${{ secrets.MEGA_PASSWORD }}
+          file_name: .env
+          
+      - name: Run bot
+        run: docker-compose up --build app

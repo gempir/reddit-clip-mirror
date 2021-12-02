@@ -30,9 +30,6 @@ def check_condition(c):
     else:
         return False
 
-
-replies = []
-
 def main():
     postsid = [
         'qy8dws',
@@ -77,16 +74,22 @@ def main():
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
                 saveClip(url, c)
-                if len(replies) == 1:
-                    json.dump(replies, open('replies.json', 'w'))
+                if len(replies) >= 1:
+                    logging.info("20 clips downloaded, exiting")
+                    with open('replies.txt', "w") as f:
+                        for line in replies:
+                            f.write(line + "\n")
+                    os._exit(0)
 
+
+replies = []
 
 def saveClip(url, c):
     try:
         def finished_upload(d):
             if d['status'] == 'finished':
                 print(d['filename'] + ' Done downloading')
-                replies.append({"file": d['filename'], "comment": c.id})
+                replies.append(d['filename'].lstrip("./") + ";" + c.id)
 
         ydl_opts = {
             'progress_hooks': [finished_upload],

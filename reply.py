@@ -1,13 +1,8 @@
-from __future__ import unicode_literals
-
-import json
 import logging
 import os
-import re
+import sys
 
 import praw
-import youtube_dl
-from mega import Mega
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -22,19 +17,10 @@ reddit = praw.Reddit(
     password=os.getenv('REDDIT_PASSWORD')
 )
 
-mega = Mega()
-m = mega.login(os.getenv('MEGA_USERNAME'), os.getenv('MEGA_PASSWORD'))
+comment = sys.argv[1:][0]
+link = sys.argv[1:][1]
 
-
-with open('replies.json') as fd:
-    replies = json.load(fd)
-
-    for reply in replies:
-        c = reddit.comment(reply['comment'])
-        print(c.body)
-
-        public_link = m.export("nnys2021clips/clips/" + reply['file'].lstrip("./"))
-        print(public_link + " new mega link")
-
-
+c = reddit.comment(comment)
+print(f"Replying to {comment}: Mirror {link}")
+c.reply(f"Mirror: {link}")
 
