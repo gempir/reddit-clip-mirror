@@ -19,10 +19,11 @@ reddit = praw.Reddit(
 
 comment = sys.argv[1:][0]
 link = sys.argv[1:][1]
+title = sys.argv[1:][2]
 
 try:
     c = reddit.comment(comment)
-    print(f"Replying to {comment}: Mirror {link}")
-    c.reply(f"Mirror: {link}")
+    print(f"Replying to {comment}: Mirror {title} {link}")
+    c.reply(f"Mirror:\n{title}\n{link}")
 except Exception as e:
     logging.error(e)

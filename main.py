@@ -20,6 +20,8 @@ reddit = praw.Reddit(
     password=os.getenv('REDDIT_PASSWORD')
 )
 
+cache_comment = reddit.comment(id='hn481ru')
+
 def check_condition(c):
     text = c.body
 
@@ -69,6 +71,9 @@ def main():
             url = check_condition(c)
             already_replied = False
 
+            if c.id in cache:
+                continue
+
             if len(c.replies) > 0:
                 for reply in c.replies:
                     if reply and reply.author and reply.author.name == os.getenv('REDDIT_USERNAME'):
@@ -78,31 +83,37 @@ def main():
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
                 saveClip(url, c)
-                if len(replies) >= 10:
-                    logging.info("10 clips downloaded, exiting")
+                if len(replies) >= 20:
+                    logging.info("20 clips downloaded, exiting")
                     with open('replies.txt', "w") as f:
                         for line in replies:
                             f.write(line + "\n")
+                    cache_comment.edit(",".join(cache))
                     os._exit(0)
 
 
 replies = []
+cache = cache_comment.body.split(",")
 
 def saveClip(url, c):
+    title = ""
+
     try:
         def finished_upload(d):
             if d['status'] == 'finished':
                 print(d['filename'] + ' Done downloading')
-                replies.append(d['filename'].lstrip("./") + ";" + c.id)
+                replies.append(d['filename'].lstrip("./") + ";" + c.id + ";" + title)
 
         ydl_opts = {
             'progress_hooks': [finished_upload],
-            'outtmpl': './clips/%(title)s-%(id)s.%(ext)s',
+            'outtmpl': './clips/%(id)s.%(ext)s',
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            title = ydl.extract_info(url, download=False)['title']
             ydl.download([url])
        
     except Exception as e:
+        cache.append(c.id)
         logging.error(e)
 
 
