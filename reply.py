@@ -20,7 +20,9 @@ reddit = praw.Reddit(
 comment = sys.argv[1:][0]
 link = sys.argv[1:][1]
 
-c = reddit.comment(comment)
-print(f"Replying to {comment}: Mirror {link}")
-c.reply(f"Mirror: {link}")
-
+try:
+    c = reddit.comment(comment)
+    print(f"Replying to {comment}: Mirror {link}")
+    c.reply(f"Mirror: {link}")
+except Exception as e:
+    logging.error(e)

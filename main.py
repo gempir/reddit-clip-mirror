@@ -61,6 +61,10 @@ def main():
         submission.comments.replace_more(limit=None)
 
         logging.info(f"Processing {len(submission.comments)} comments on post {submission.id}: {submission.title}")
+        if submission.locked:
+            logging.info(f"Post {submission.id}: {submission.title} is locked, skipping")
+            continue
+
         for c in submission.comments:
             url = check_condition(c)
             already_replied = False
