@@ -20,7 +20,13 @@ reddit = praw.Reddit(
     password=os.getenv('REDDIT_PASSWORD')
 )
 
-cache_comment = reddit.comment(id='hn481ru')
+cache = []
+
+try: 
+    cache_comment = reddit.comment(id='hn481ru')
+    cache = cache_comment.body.split(",")
+except Exception as e:
+    logging.warning("Cache comment could not be fetched", exc_info=e)
 
 def check_condition(c):
     text = c.body
@@ -93,7 +99,6 @@ def main():
 
 
 replies = []
-cache = cache_comment.body.split(",")
 
 def saveClip(url, c):
     title = ""
