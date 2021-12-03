@@ -24,6 +24,6 @@ title = sys.argv[1:][2]
 try:
     c = reddit.comment(comment)
     print(f"Replying to {comment}: Mirror {title} {link}")
-    c.reply(f"Mirror:\n{title}\n{link}")
+    c.reply(f"Mirror:\n\n{title}\n\n{link}")
 except Exception as e:
     logging.error(e)
