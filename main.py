@@ -1,9 +1,11 @@
+from __future__ import unicode_literals
 import logging
 import os
 import re
 
 import praw
 import youtube_dl
+import json
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -91,7 +93,7 @@ def saveClip(url, c):
 
         ydl_opts = {
             'progress_hooks': [finished_upload],
-            'outtmpl': './clips/%(id)s.%(ext)s',
+            'outtmpl': './clips/%(title)s-%(id)s.%(ext)s',
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
