@@ -10,6 +10,8 @@ python3 main.py
 
 mega-login "$MEGA_USERNAME" "$MEGA_PASSWORD"
 
+cat replies.txt
+
 while IFS= read -r line
 do
     file=$(echo $line | cut -f1 -d";")
