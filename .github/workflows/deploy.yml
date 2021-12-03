@@ -7,7 +7,7 @@ on:
 
 jobs:
   Deploy:
-    timeout-minutes: 25
+    timeout-minutes: 5
     runs-on: ubuntu-latest
 
     steps:
