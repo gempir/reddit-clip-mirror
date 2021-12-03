@@ -16,6 +16,6 @@ do
     comment=$(echo $line | cut -f2 -d";")
 
     mega-put -v "./$file" nnys2021clips/clips
-    link=`mega-export -a "nnys2021clips/$file" | awk '{print $4}'`
-    python3 reply.py "$comment" "$link"
+    link=`mega-export -a "nnys2021clips/$file" | rev | cut -d ' ' -f 1 | rev`
+    python3 reply.py "$comment" "${link#'https://'}"
 done < "replies.txt"
