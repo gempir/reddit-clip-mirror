@@ -8,7 +8,7 @@ bash
 
 python3 main.py
 
-mega-login "$MEGA_USERNAME" "$MEGA_PASSWORD"
+mega-login "$MEGA_USERNAME" "$MEGA_PASSWORD" || true
 
 cat replies.txt
 
