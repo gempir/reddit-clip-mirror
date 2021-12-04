@@ -87,14 +87,19 @@ def main():
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
                 saveClip(url, c)
-                if len(replies) >= 5:
-                    logging.info("5 clips downloaded, exiting")
-                    with open('replies.txt', "w") as f:
-                        for line in replies:
-                            f.write(line + "\n")
-                    cache_comment.edit(",".join(cache))
-                    os._exit(0)
+                logging.info(f"{len(replies)} clips saved")
+                if len(replies) >= 10:
+                   save_and_exit() 
+    
+    save_and_exit()
 
+def save_and_exit():
+    logging.info("clips limit downloaded, exiting")
+    with open('replies.txt', "w") as f:
+        for line in replies:
+            f.write(line + "\n")
+    cache_comment.edit(",".join(cache))
+    os._exit(0)
 
 replies = []
 
