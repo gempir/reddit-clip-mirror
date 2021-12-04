@@ -2,7 +2,7 @@ name: Mirror
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/50 * * * *"
   workflow_dispatch:
 
 jobs:
