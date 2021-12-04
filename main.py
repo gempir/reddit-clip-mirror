@@ -1,11 +1,9 @@
-from __future__ import unicode_literals
 import logging
 import os
 import re
 
 import praw
 import youtube_dl
-import json
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -89,8 +87,8 @@ def main():
             if url and not already_replied:
                 logging.info(f"Found new clip: {url}")
                 saveClip(url, c)
-                if len(replies) >= 8:
-                    logging.info("8 clips downloaded, exiting")
+                if len(replies) >= 5:
+                    logging.info("5 clips downloaded, exiting")
                     with open('replies.txt', "w") as f:
                         for line in replies:
                             f.write(line + "\n")
